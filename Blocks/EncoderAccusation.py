@@ -1,5 +1,5 @@
 import torch as t
-from allennlp.modules.seq2vec_encoders import CnnEncoder
+from Blocks.Layers import CnnEncoder
 
 
 class EncoderAccusation(t.nn.Module):
@@ -15,13 +15,12 @@ class EncoderAccusation(t.nn.Module):
         :param mask: [batch, seq_len, law_len]
         :return: 
         """
-        batch_size, seq_len, law_len, emb = inputs.size()
-        inputs = inputs.view((-1, law_len, emb))
-        mask = mask.view((-1, law_len))
+        raw_shape = inputs.size()
+        inputs = inputs.view((-1, raw_shape[2], raw_shape[3]))
+        mask = mask.view((-1, raw_shape[2]))
         net = self.ce(inputs, mask)
-        net = net.view((batch_size, seq_len, self.output_dim))
+        net = net.view((raw_shape[0], raw_shape[1], self.output_dim))
         return net
-
 
 #
 #

@@ -1,6 +1,5 @@
 import torch as t
-from allennlp.modules.seq2vec_encoders import CnnEncoder
-
+from Blocks.Layers import CnnEncoder
 
 class EncoderLaw(t.nn.Module):
     def __init__(self, embedding_dim, num_filter, output_dim):

@@ -58,3 +58,10 @@ class Highway(torch.nn.Module):
             gate = torch.nn.functional.sigmoid(gate)
             current_input = gate * linear_part + (1 - gate) * nonlinear_part
         return current_input
+
+
+a = torch.randn((64,300))
+hw = Highway(300,2)
+
+b=hw(a)
+b.shape
