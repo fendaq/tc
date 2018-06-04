@@ -2,6 +2,7 @@ import math
 import torch as t
 from Blocks.Layers import CustomLinear
 from Blocks.Layers.softmax_mask import softmax_mask
+import ipdb
 
 
 class SelfAttention(t.nn.Module):
@@ -24,7 +25,7 @@ class SelfAttention(t.nn.Module):
         dot = passage.bmm(query)/math.sqrt(self.hidden_size)
         masked_dot = softmax_mask(dot, mask, -1)
         # attention dot query
-        outputs = masked_dot * passage
+        outputs = masked_dot.bmm(passage)
         gate = self.gate(outputs)
         outputs = gate * inputs + (1-gate) * outputs
         return outputs

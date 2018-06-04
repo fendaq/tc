@@ -14,6 +14,8 @@ class CustomLinear(t.nn.Module):
             self.batch_norm = t.nn.BatchNorm1d(out_feature)
         if act is not None:
             self.act = act
+        else:
+            self.act = None
 
     def forward(self, inputs):
         net = self.linear(inputs)

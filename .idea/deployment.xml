@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="gpu">
+  <component name="PublishConfigData" autoUpload="Always" serverName="gpu">
     <serverData>
       <paths name="gpu">
         <serverdata>
           <mappings>
             <mapping deploy="/usr/tongjinle/tjl/cail2018_law" local="$PROJECT_DIR$" web="" />
           </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/raw" />
+            <excludedPath local="true" path="$PROJECT_DIR$/processed" />
+            <excludedPath path="/usr/tongjinle/tjl/cail2018_law/raw" />
+            <excludedPath path="/usr/tongjinle/tjl/cail2018_law/processed" />
+            <excludedPath local="true" path="$PROJECT_DIR$/pr.pkl" />
+            <excludedPath path="/usr/tongjinle/tjl/cail2018_law/pr.pkl" />
+          </excludedPaths>
         </serverdata>
       </paths>
     </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
   </component>
 </project>

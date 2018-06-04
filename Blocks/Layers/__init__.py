@@ -7,3 +7,4 @@ from .softmax_mask import softmax_mask
 from .layerNorm import LayerNorm
 from .cnnEncoder import CnnEncoder
 from .multiHeadAttention import MultiHeadSelfAttention
+from .attentionPooling import AttentionPooling

@@ -78,7 +78,7 @@ class Preprocessor(object):
         if meta is not None:
             result['label']['term_of_imprisonment'] = -2 if meta['term_of_imprisonment']['death_penalty'] \
                 else -1 if meta['term_of_imprisonment']['life_imprisonment'] \
-                else meta['term_of_imprisonment']['imprisonment']
+                else meta['term_of_imprisonment']['imprisonment']//6
             accusation_id = [self.accus[i] for i in meta['accusation']]
             law_id = [self.laws[str(i)] for i in meta['relevant_articles']]
             result['label']['accusation'] = [1 if i in accusation_id else 0 for i in range(len(self.accus))]
