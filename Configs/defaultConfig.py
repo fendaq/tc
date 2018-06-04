@@ -1,9 +1,11 @@
 class DefaultConfig(object):
+    batch_size = 64
     char_embedding_dim = 300
     seg_embedding_dim = 300
     hidden_size = 150
     num_head = 3
-
+    char_max_lenth = 1000
+    word_max_lenth = 500
 
 
     def parse(self, kwargs, print_=True):

@@ -23,6 +23,12 @@ class DataSet(Dataset):
         self.char_features = char_features
         self.labels = labels
 
+    def get_law_feature(self):
+        pass
+
+    def get_accusation_feature(self):
+        pass
+
     def pre_pad(self, feature, pad_to):
         ori_len = len(feature)
         if ori_len >= pad_to:
