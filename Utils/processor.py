@@ -81,6 +81,8 @@ class Preprocessor(object):
                 else meta['term_of_imprisonment']['imprisonment']//6
             accusation_id = [self.accus[i] for i in meta['accusation']]
             law_id = [self.laws[str(i)] for i in meta['relevant_articles']]
+            result['label']['accusation_id'] = accusation_id
+            result['label']['law_id'] = law_id
             result['label']['accusation'] = [1 if i in accusation_id else 0 for i in range(len(self.accus))]
             result['label']['law'] = [1 if i in law_id else 0 for i in range(len(self.laws))]
 

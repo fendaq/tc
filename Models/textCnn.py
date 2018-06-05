@@ -11,6 +11,7 @@ class TextCnn(BasicModel):
         super(TextCnn, self).__init__()
         self.accusation_num = 202
         self.law_num = 183
+        self.imprison_num = 53
         self.char_embedding_dim = args.char_embedding_dim
         self.seg_embedding_dim = args.seg_embedding_dim
         self.seg_vocab_size = seg_vocab_size
@@ -19,11 +20,9 @@ class TextCnn(BasicModel):
         self.num_head = args.num_head
 
         self.seg_embedding = t.nn.Sequential(t.nn.Embedding(self.seg_vocab_size,
-                                                            self.seg_embedding_dim),
-                                             Gate(self.seg_embedding_dim))
+                                                            self.seg_embedding_dim))
         self.char_embedding = t.nn.Sequential(t.nn.Embedding(self.char_vocab_size,
-                                                             self.char_embedding_dim),
-                                              Gate(self.seg_embedding_dim))
+                                                             self.char_embedding_dim))
         self.EncoderFact = EncoderFact(self.seg_embedding_dim, self.hidden_size, self.num_head, self.hidden_size)
         self.EncoderAccusation = EncoderAccusation(self.seg_embedding_dim, self.hidden_size, self.hidden_size)
         self.Fusion = Fusion(self.hidden_size, self.hidden_size, self.hidden_size)
@@ -45,7 +44,7 @@ class TextCnn(BasicModel):
             ('linear', t.nn.Linear(self.hidden_size, self.hidden_size)),
             ('bn', t.nn.BatchNorm1d(self.hidden_size)),
             ('act', t.nn.ReLU()),
-            ('linear2', t.nn.Linear(self.hidden_size, 1)),
+            ('linear2', t.nn.Linear(self.hidden_size, self.imprison_num)),
         ]))
     def get_mask(self, seg):
         """

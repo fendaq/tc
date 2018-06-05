@@ -1,4 +1,6 @@
 import torch as t
+import ipdb
+
 
 
 class CustomLinear(t.nn.Module):
@@ -20,7 +22,7 @@ class CustomLinear(t.nn.Module):
     def forward(self, inputs):
         net = self.linear(inputs)
         if self.bn:
-            net = self.batch_norm(net.transpose(-2, -1)).transpose(-2, -1)
+            net = self.batch_norm(net.transpose(-2, -1).contiguous()).transpose(-2, -1)
         if self.act is not None:
             net = self.act(net)
         return net

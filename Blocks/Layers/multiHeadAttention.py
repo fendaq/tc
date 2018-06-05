@@ -29,7 +29,7 @@ class MultiHeadSelfAttention(t.nn.Module):
         #  -> [num_head, batch*seq_len, hidden_size]
         #  -> [num_head*batch, seq_len, hidden_size]
         passage = self.passage_linear(multihead_inputs).view(self.num_head * batch_size, seq_len, self.hidden_size)
-        query = self.query_linear(multihead_inputs).view(self.num_head*batch_size, seq_len, self.hidden_size)
+        query = self.query_linear(multihead_inputs).view(self.num_head * batch_size, seq_len, self.hidden_size)
         # [num_head*batch, seq_len, seq_len]
         alpha = query.bmm(passage.transpose(-1, -2))/math.sqrt(self.hidden_size)
         # mask & normalize

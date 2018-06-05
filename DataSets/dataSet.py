@@ -74,15 +74,15 @@ class DataSet(Dataset):
     def __len__(self):
         return len(self.file_list)
 
-
-import pickle as pk
-
-processor = pk.load(open('pr.pkl', 'rb'))
-
-ds = DataSet(100,500,'processed/data_train/', processor)
-from torch.utils.data import DataLoader
-
-dl = DataLoader(ds,2)
-for i in dl:
-    cc = i
-    break
+#
+# import pickle as pk
+#
+# processor = pk.load(open('pr.pkl', 'rb'))
+#
+# ds = DataSet(100,500,'processed/data_train/', processor)
+# from torch.utils.data import DataLoader
+#
+# dl = DataLoader(ds,2)
+# for i in dl:
+#     cc = i
+#     break
