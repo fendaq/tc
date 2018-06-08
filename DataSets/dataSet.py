@@ -26,7 +26,6 @@ class DataSet(Dataset):
         self.labels = labels
         #self.law_feature = self.get_law_feature()
         self.accusation_feature = self.get_accusation_feature(processor)
-        #
 
     def get_law_feature(self):
         laws = [str.strip(i) for i in open('raw/law.txt').readlines()]

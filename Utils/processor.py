@@ -1,4 +1,5 @@
 #import thulac
+import gensim
 from jieba.posseg import POSTokenizer
 import json
 import ipdb
@@ -8,6 +9,7 @@ import shutil
 from collections import Counter
 import pickle as pk
 import fire
+import numpy as np
 
 
 class Preprocessor(object):
@@ -67,6 +69,7 @@ class Preprocessor(object):
         result['index'] = index
         token_list = [[word, seg] for word, seg in self.model.cut(fact)]
         # token_list : [['seg','pos'],]
+        # TODO: stop words
         if not convert_to_id:
             result['feature']['seg'] = [i[0] for i in token_list]
             result['feature']['pos'] = [i[1] for i in token_list]
@@ -93,13 +96,29 @@ class Preprocessor(object):
         return result
 
     def build_vocab(self, wv_seg=None, wv_char=None):
+        model = gensim.models.Word2Vec.load('train_word2vec/w2v.model')
+        model_char = gensim.models.Word2Vec.load('train_word2vec/w2v_char.model')
+        self.seg_matrix = [[0.0]*300, [0.0]*300]
+        self.char_matrix = [[0.0]*300, [0.0]*300]
         for key in list(self.counter.keys()):
             idx = 2
             for item in tqdm(self.counter[key].items(), desc='building '+key):
-                if item[1] > 1:
-                    self.token2id[key][item[0]] = idx
-                    idx += 1
-        # todo use pretrained
+                if key == 'seg':
+                    if (item[1] > 1) & (item[0] in model.wv.vocab):
+                        self.token2id['seg'][item[0]] = idx
+                        self.seg_matrix.append(model.wv[item[0]])
+                        idx += 1
+                if key == 'char':
+                    if (item[1] > 1) & (item[0] in model_char.wv.vocab):
+                        self.token2id['char'][item[0]] = idx
+                        self.char_matrix.append(model_char.wv[item[0]])
+                        idx += 1
+                elif key == 'pos':
+                    if item[1] > 1:
+                        self.token2id['pos'][item[0]] = idx
+                        idx += 1
+        self.seg_matrix = np.array(self.seg_matrix)
+        self.char_matrix = np.array(self.char_matrix)
 
     def save(self):
         pk.dump(self, open('pr.pkl', 'wb'))

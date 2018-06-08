@@ -7,7 +7,7 @@ import ipdb
 
 
 class TextCnn(BasicModel):
-    def __init__(self, args, seg_vocab_size, char_vocab_size):
+    def __init__(self, args, seg_vocab_size, char_vocab_size, seg_matrix, char_matrix):
         super(TextCnn, self).__init__()
         self.accusation_num = 202
         self.law_num = 183
@@ -19,10 +19,13 @@ class TextCnn(BasicModel):
         self.hidden_size = args.hidden_size
         self.num_head = args.num_head
 
-        self.seg_embedding = t.nn.Sequential(t.nn.Embedding(self.seg_vocab_size,
-                                                            self.seg_embedding_dim))
-        self.char_embedding = t.nn.Sequential(t.nn.Embedding(self.char_vocab_size,
-                                                             self.char_embedding_dim))
+        self.seg_embedding = t.nn.Embedding(self.seg_vocab_size, self.seg_embedding_dim)
+        self.char_embedding = t.nn.Embedding(self.char_vocab_size, self.char_embedding_dim)
+        self.seg_embedding.weight.data.copy_(t.from_numpy(seg_matrix))
+        self.char_embedding.weight.data.copy_(t.from_numpy(char_matrix))
+        self.seg_embedding.weight.requires_grad = False
+        self.char_embedding.weight.requires_grad = False
+
         self.EncoderFact = EncoderFact(self.seg_embedding_dim, self.hidden_size, self.num_head, self.hidden_size)
         self.EncoderAccusation = EncoderAccusation(self.seg_embedding_dim, self.hidden_size, self.hidden_size)
         self.Fusion = Fusion(self.hidden_size, self.hidden_size, self.hidden_size)
@@ -84,7 +87,6 @@ class TextCnn(BasicModel):
         imprison_logits = self.imprison_linear(net)
 
         return accusation_logits, law_logits, imprison_logits
-
 
 
 # import pickle as pk

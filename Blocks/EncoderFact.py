@@ -26,15 +26,13 @@ class EncoderFact(t.nn.Module):
         net = self.feedforward2(net)
         return net
 
-#
-#
+
 # fact = t.randn((64,100,300))
 # mask = t.ones((64,100))
 # fe = EncoderFact(300,100,3,150)
 # fe(fact,mask).shape
 
-#
-#
-#
+
+
 # law = t.randn((64,202,20,300))
 # law_mask = t.randn((64,202,20))
