@@ -7,10 +7,13 @@ from tqdm import tqdm
 
 
 with open('train_word2vec/corpus.txt', 'w') as writer:
+    with open('Utils/stopwords.txt')as ff:
+        data = ff.readlines()
+        stops = [str.strip(i) for i in data]
     for i in tqdm(open('raw/data_train.json','r')):
         line = json.loads(i)
         text = line['fact']
-        text = ' '.join(jieba.cut(text))
+        text = ' '.join([i for i in jieba.cut(text) if i not in stops])
         writer.write(text+'\n')
 
 

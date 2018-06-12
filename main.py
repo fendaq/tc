@@ -32,8 +32,8 @@ def score_sigmoid(pre_logit, tru):
     return score
 
 
-def score_topk(pre_logit, tru, k):
-    pre = t.topk(pre_logit, k)[1]
+# def score_topk(pre_logit, tru, k):
+#     pre = t.topk(pre_logit, k)[1]
 
 def val(model, dev_loader):
     model.eval()
@@ -51,13 +51,11 @@ def val(model, dev_loader):
         acc_score = score_sigmoid(accusation_logits, accusation)
         law_score = score_sigmoid(law_logits, law)
         loss = 0.5 * acc_loss + 0.5 * law_loss  # + 0.2 * imprison_loss
-        acc_loss_meter.add(acc_loss)
-        law_loss_meter.add(law_loss)
+        acc_loss_meter.add(acc_loss.item())
+        law_loss_meter.add(law_loss.item())
         acc_score_meter.add(acc_score)
         law_score_meter.add(law_score)
-
     model.train()
-
     return acc_loss_meter.value()[0], law_loss_meter.value()[0], acc_score_meter.value()[0], law_score_meter.value()[0]
 
 def train(**kwargs):
@@ -105,12 +103,16 @@ def train(**kwargs):
             loss = 0.5 * acc_loss + 0.5 * law_loss# + 0.2 * imprison_loss
             loss.backward()
             optimizer.step()
-            if step % 1000 == 0:
+            if (step % 500 == 0) & (step != 0):
                 acc_score = score_sigmoid(accusation_logits, accusation)
                 law_score = score_sigmoid(law_logits, law)
-                print(loss.data, step, epoch)
-                print(acc_score)
-                print(law_score)
+                val_acc_loss, val_law_loss, val_acc_score, val_law_score = val(model, valid_loader)
+                print('epoch:%s,step:%s'%(epoch, step))
+                print('    train:')
+                print('        loss:%s,accsocre:%s,lawscore:%s'%(loss.item(), acc_score, law_score))
+                print('    val:')
+                print('        accloss:%s,law_loss:%s,accscore:%s,lawscore:%s' % (val_acc_loss, val_law_loss, val_acc_score, val_law_score))
+                print(' ')
         val_acc_loss, val_law_loss, val_acc_score, val_law_score = val(model, valid_loader)
         print('epoch:', epoch)
         print('    train:')

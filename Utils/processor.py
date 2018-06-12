@@ -23,6 +23,13 @@ class Preprocessor(object):
         self.file_dict = {'train': root_raw+'data_train.json', 'dev': root_raw+'data_valid.json', 'test': root_raw+'data_test.json'}
         self.label_dict = {'accusation': 'raw/accu.txt', 'law': 'raw/law.txt'}
         self.token2id = {'seg': {'<PAD>': 0, '<UNK>': 1}, 'pos': {'<PAD>': 0, '<UNK>': 1}, 'char': {'<PAD>': 0, '<UNK>': 1}}
+        self.stopwords = self.get_stopwords()
+
+    def get_stopwords(self):
+        with open('Utils/stopwords.txt')as ff:
+            data = ff.readlines()
+            stops = [str.strip(i) for i in data]
+        return stops
 
     def process_content(self, contents):
         root = 'contents/'
@@ -67,7 +74,7 @@ class Preprocessor(object):
         # fact: str '我爱北京天安门'
         result = {'feature':{},'label':{}}
         result['index'] = index
-        token_list = [[word, seg] for word, seg in self.model.cut(fact)]
+        token_list = [[word, seg] for word, seg in self.model.cut(fact) if word not in self.stopwords]
         # token_list : [['seg','pos'],]
         # TODO: stop words
         if not convert_to_id:
@@ -121,5 +128,5 @@ class Preprocessor(object):
         self.char_matrix = np.array(self.char_matrix)
 
     def save(self):
-        pk.dump(self, open('pr.pkl', 'wb'))
+        pk.dump(self, open('predictor/pr.pkl', 'wb'))
         print('saved')

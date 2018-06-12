@@ -7,7 +7,7 @@ import jieba
 
 
 class DataSet(Dataset):
-    def __init__(self, char_max_lenth, word_max_lenth, root, processor, word_features=['seg', 'pos'], char_features=['char'], labels=['term_of_imprisonment','accusation','law']):
+    def __init__(self, char_max_lenth, word_max_lenth, root, processor, word_features=['seg', 'pos'], char_features=['char'], labels=['term_of_imprisonment','accusation','law'],):
         """
         :param args: obj args
         :param root: str data root
